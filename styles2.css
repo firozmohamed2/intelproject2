@@ -32,6 +32,7 @@ iframe {
     justify-content: space-between;
     align-items: center;
     transition: background-color 0.3s;
+    display: none;
 }
 
 .controls:hover {
@@ -283,7 +284,9 @@ h3{
     display: none;
 }
 
-
+.side-panel{
+    display: none;
+}
 
 
 
@@ -294,7 +297,7 @@ h3{
         max-width: 100%;
         position: relative;
         padding-bottom: 56.25%; /* 16:9 aspect ratio */
-        height: 0;
+        height: calc(100vh - 120px); /* Reducing height to make room for controls */
         overflow: hidden;
         border-radius: 8px;
     }
@@ -302,6 +305,7 @@ h3{
     .controls {
         width: 100%;
         max-width: 100%;
+        display: none;
     }
 
     iframe {
@@ -328,6 +332,6 @@ h3{
     .side-panel {
         position: relative;
         width: 100%;
-        display: block;
+        display: none;
     }
 }
