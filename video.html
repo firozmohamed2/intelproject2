@@ -47,6 +47,13 @@
 
     <!-- Options buttons below the player -->
      <div class="container">
+       
+    </div>
+
+    <button class="collapse-button" id="toggle-panel">Topics</button>
+
+    <div class="side-panel" id="topic-panel">
+        <!-- Topics will be inserted here by JavaScript -->
         <div class="options-container-4">
             <button class="option-button" id="option-a">A</button>
             <button class="option-button" id="option-b">B</button>
@@ -63,25 +70,41 @@
             <button class="option-button" id="option2-b">B</button>
         </div>
         <div class="clarity-container">
-            <button class="clarity-button" id="option-clear">Clear</button>
-            <button class="clarity-button" id="option-notClear">Not Clear</button>
+            <button class="clarity-button" id="option-clear">✅</button>
+            <button class="clarity-button" id="option-notClear">❌</button>
             
         </div>
         <div class="boolean-container">
-            <button class="boolean-button" id="option-yes">Yes</button>
-            <button class="boolean-button" id="option-not">No</button>
+            <button class="boolean-button" id="option-yes">✅</button>
+            <button class="boolean-button" id="option-not">❌</button>
             
         </div>
     </div>
 
-    <button class="collapse-button" id="toggle-panel">Topics</button>
+        <button class="fullscreenButton" onclick="enterLandscapeFullscreen()">Fullscreen</button>
 
-    <div class="side-panel" id="topic-panel">
-        <!-- Topics will be inserted here by JavaScript -->
-        <h3>Topics</h3>
-    </div>
-
-    <script src="script.js">
+    <script>
+    function enterLandscapeFullscreen() {
+        // Request fullscreen
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen().then(() => {
+                // Lock orientation to landscape
+                if (screen.orientation && screen.orientation.lock) {
+                    screen.orientation.lock('landscape').catch(err => {
+                        console.error('Orientation lock failed:', err);
+                    });
+                }
+            });
+        } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+            document.documentElement.mozRequestFullScreen();
+        } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari, and Opera
+            document.documentElement.webkitRequestFullscreen();
+        } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+            document.documentElement.msRequestFullscreen();
+        }
+    }
+    </script>
+    <script src="script2.js">
         
    
       
