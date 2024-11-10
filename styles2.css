@@ -32,7 +32,6 @@ iframe {
     justify-content: space-between;
     align-items: center;
     transition: background-color 0.3s;
-    display: none;
 }
 
 .controls:hover {
@@ -103,15 +102,13 @@ iframe {
 display: flex;
 justify-content: center;
 width: 640px; /* Same width as video player */
-background-color: black;
 padding: 10px 0;
 border-radius: 0px 0px 10px 10px;
 }
 .options-container-4 {
 display: flex;
 justify-content: center;
-width: 640px; /* Same width as video player */
-background-color: black;
+/* width: 640px;  */
 padding: 10px 0;
 border-radius: 0px 0px 10px 10px;
 display:none;
@@ -120,8 +117,7 @@ display:none;
 .options-container-3 {
 display: flex;
 justify-content: center;
-width: 640px; /* Same width as video player */
-background-color: black;
+/* width: 640px;  */
 padding: 10px 0;
 border-radius: 0px 0px 10px 10px;
 display:none;
@@ -131,8 +127,7 @@ display:none;
 .options-container-2 {
 display: flex;
 justify-content: center;
-width: 640px; /* Same width as video player */
-background-color: black;
+/* width: 640px;  */
 padding: 10px 0;
 border-radius: 0px 0px 10px 10px;
 display: none;
@@ -141,8 +136,7 @@ display: none;
 .clarity-container{
 display: flex;
 justify-content: center;
-width: 640px; /* Same width as video player */
-background-color: black;
+/* width: 640px;  */
 padding: 10px 0;
 border-radius: 0px 0px 10px 10px;
 display: none;
@@ -153,8 +147,7 @@ display: none;
 .boolean-container{
 display: flex;
 justify-content: center;
-width: 640px; /* Same width as video player */
-background-color: black;
+/* width: 640px;  */
 padding: 10px 0;
 border-radius: 0px 0px 10px 10px;
 display: none;
@@ -166,8 +159,8 @@ display: none;
     width: 25px;
     height: 25px;
     margin: 0 15px;
-    background-color: #ffffff;
-    color: rgb(0, 0, 0);
+    background-color: #167ac6;
+    color: rgb(255, 255, 255);
     border: none;
     border-radius: 50%;
     font-size: 14px;
@@ -176,6 +169,7 @@ display: none;
     align-items: center;
     cursor: pointer;
     transition: transform 0.2s;
+    margin: 5px;
     /* font-family: 'Open-sans',sans-serif; */
 }
 
@@ -224,15 +218,15 @@ display: none;
 
  /* Style for the side panel */
  .side-panel {
-    height: 100vh;
-    width: 250px;
+    height: auto; /* Allow side panel to adjust to content height */
+    /* width: 250px; */
     position: fixed;
-    top: 0;
+    /* top: 0; */
     left: 0;
-    background-color: #ffffff;
+    /* bottom: 0; */
+    background-color: #f9f9f9;
     padding-top: 20px;
     /* box-shadow: 2px 0 5px rgb(235 218 218 / 50%); */
-    overflow-y: auto;
 }
 
 /* Style for the topic items */
@@ -284,29 +278,45 @@ h3{
     display: none;
 }
 
-.side-panel{
-    display: none;
+
+ .fullscreenButton{
+    /* width: 25px; */
+    height: 25px;
+    margin: 0 15px;
+    background-color: #167ac6;
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+    margin: 5px;
 }
 
 
-
 @media screen and (max-width: 768px) {
-    /* Maintain 16:9 aspect ratio for video player in landscape */
+    body {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
     .video-player {
         width: 100%;
-        max-width: 100%;
+        max-width: 100%; /* Full width on mobile */
         position: relative;
         padding-bottom: 56.25%; /* 16:9 aspect ratio */
-        height: calc(100vh - 120px); /* Reducing height to make room for controls */
+        height: 0;
         overflow: hidden;
         border-radius: 8px;
     }
 
-    .controls {
+    .controls{
         width: 100%;
-        max-width: 100%;
-        display: none;
-    }
+        max-width: 100%;    }
 
     iframe {
         position: absolute;
@@ -317,21 +327,38 @@ h3{
         border: none;
     }
 
-    /* Full width containers on mobile */
-    .container,
-    .options-container-4,
-    .options-container-3,
-    .options-container-2,
-    .clarity-container,
-    .boolean-container {
+    .container {
         width: 100%;
         max-width: 100%;
     }
 
-    /* Side panel settings */
+    /* Collapse side panel for mobile view */
+   
+
     .side-panel {
         position: relative;
         width: 100%;
-        display: none;
+        display: block;
     }
+
+    .side-panel.collapsed {
+        display: block;
+    }
+
+   
+}
+
+.side-panel{
+    display: none;
+}
+
+.options-container-4,
+.options-container-3,
+.options-container-2,
+.clarity-container,
+.boolean-container {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: left; /* Center items horizontally */
+    justify-content: flex-start; /* Align items to the top */
 }
