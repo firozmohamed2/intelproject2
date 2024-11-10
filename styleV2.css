@@ -44,7 +44,7 @@ iframe {
     transition: transform 0.2s;
 }
 
-#play-pause{
+#play-pause,#rewind,#forward{
     background: #fff;
     color: #167ac6;
     padding: 6px 8px;
@@ -371,6 +371,9 @@ h3{
     .fullscreenButton {
         display: none;
     }
+    #forward{
+        display: inline-block;
+    }
 }
 
 @media (orientation: portrait){
@@ -383,11 +386,34 @@ h3{
     flex-direction: row; /* Stack items vertically */
     align-items: center; /* Center items horizontally */
 }
+#forward{
+    display: none;
+}
 }
 
 
-#rewind,#forward{
-    display: none;
+#rewind{
+    width: 35px; /* Set your desired size */
+    height: 35px;
+    background-image: url("rewind.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: none;
+    background-color: white;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+#forward{
+    width: 35px; /* Set your desired size */
+    height: 35px;
+    background-image: url("forward.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: none;
+    background-color: white;
+    border-radius: 50%;
+    cursor: pointer;
 }
 
 
@@ -400,4 +426,39 @@ h3{
     border: none;
     background-color: transparent;
     cursor: pointer;
+}
+
+/* Loading Screen Styles */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.loader {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#loading-screen p {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #333;
 }
