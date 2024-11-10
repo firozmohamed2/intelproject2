@@ -35,10 +35,11 @@
     </div>
 
     <div class="controls">
-        <button id="rewind"><i class="fas fa-backward"></i></button> 
+        <div>
+        <button id="rewind" class="styled-image-button"></button> 
         <button id="play-pause"><i class="fas fa-play"></i></button>
-        <button id="forward"><i class="fas fa-forward"></i></button> 
-
+        <button id="forward" class="styled-image-button"></button> 
+            </div>
         <div class="options-container-4">
             <button class="option-button" id="option-a">A</button>
             <button class="option-button" id="option-b">B</button>
@@ -75,6 +76,18 @@
    
 
         <button class="fullscreenButton" onclick="enterLandscapeFullscreen()">Fullscreen</button>
+
+        <!-- Loading Screen -->
+<div id="loading-screen">
+    <div class="loader"></div>
+    <p>Loading, please wait...</p>
+</div>
+
+<!-- Main Content -->
+<div id="main-content" style="display: none;">
+    <!-- Your app’s main content goes here -->
+</div>
+
 
     <script>
     function enterLandscapeFullscreen() {
