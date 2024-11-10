@@ -166,22 +166,38 @@ function onPlayerReady(event) {
         }, 100); // Check every 100ms
     }
 
+    rewindButton.addEventListener('click', () => {
+        console.log("rew");
+        let currentTime = event.target.getCurrentTime();
+        if((currentTime-5) < startTime){
+            event.target.seekTo(Math.max(startTime, 0), true);
+            player.playVideo();
+        }
+        else{
+        event.target.seekTo(Math.max(currentTime - 5, 0), true);
+        player.playVideo();
+        }
+    });
 
+    // Forward 10 seconds
+    forwardButton.addEventListener('click', () => {
+        
+        let currentTime = event.target.getCurrentTime();
+        let duration = event.target.getDuration();
+        if((currentTime+5) > pauseTime){
+            event.target.seekTo(Math.min(currentTime + 5, duration), true);
+            player.pauseVideo();
+        }
+        else{
+            event.target.seekTo(Math.min(pauseTime, duration), true);
+            player.playVideo();
+        }
+    });
 
 
      
 
-     // Function to set control data for start, pause, and next times
-   
-            
-    // Function to seek to a specific time in the video
-    function seekToTime(timeInSeconds) {
-        if (player && typeof timeInSeconds === 'number') {
-            player.seekTo(timeInSeconds, true);  // Seek accurately to the specified time
-            player.playVideo();  // Optionally start playing the video
-            console.log("Seeked to", timeInSeconds);
-        }
-    }
+  
             
     // Call this function whenever you want to start the check
     startCheckingPlayerTime();
@@ -274,7 +290,6 @@ async function fetchDataFromFirestore() {
 
         if (quizDoc.exists) {
             const data = quizDoc.data();
-            console.log("mapsPanel",data.map);
             sideBarData= data.map;
            // generateSidePanel(sideBarData);
 
@@ -288,7 +303,7 @@ async function fetchDataFromFirestore() {
 
                 // Check if startTime is valid, then seek to it
         seekToTime(startTime); // Seek and start the video after startTime is fetched
-    
+            hideLoadingScreen();
 
         } else {
             console.error("No quiz data found!");
@@ -493,6 +508,14 @@ function handleOptionClick(option) {
 }
 
 
+
+function hideLoadingScreen() {
+    document.getElementById("loading-screen").style.display = "none";
+    document.getElementById("main-content").style.display = "block";
+}
+
+
+
 // Load YouTube Iframe API dynamically
 const tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
@@ -504,47 +527,8 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 
 
-// side panel 
-        
- // Array of topics
- const topics = [
-    { id: 'topic1', title: 'Introduction to Quantum Physics' },
-    { id: 'topic2', title: 'Relativity and Space-Time' },
-    { id: 'topic3', title: 'Thermodynamics' },
-    { id: 'topic4', title: 'Electromagnetism' },
-    { id: 'topic5', title: 'Optics and Light' }
-];
-
-// Function to dynamically generate the side panel list
-// function generateSidePanel(sideBarData) {
-
-    
-//     const panel = document.getElementById('topic-panel');
-//     topics.forEach(topic => {
-//         const topicLink = document.createElement('a');
-//         topicLink.href = '#';
-//         topicLink.innerHTML = topic.title;
-//         topicLink.onclick = () => displayTopic(topic);
-//         panel.appendChild(topicLink);
-//     });
-
-//         if (Array.isArray(sideBarData)) {
-//             sideBarData.forEach((_, key) => console.log(key));
-//         } else {
-//             console.error("sideBarData is not an array:", sideBarData);
-//         }
-    
-    
-// }
 
 
-
-
-
-
-
-
- // Function to display the selected topic's content
  
 
 
