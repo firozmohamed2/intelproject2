@@ -511,7 +511,7 @@ function handleOptionClick(option) {
 
 function hideLoadingScreen() {
     document.getElementById("loading-screen").style.display = "none";
-    document.getElementById("main-content").style.display = "block";
+    document.getElementById("container").style.display = "flex";
 }
 
 
