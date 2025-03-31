@@ -188,8 +188,8 @@ display: none;
 }
 
 .clarity-button {
-    height: 35px;
-    width: 35px;
+    height: 30px;
+    width: 30px;
     margin: 0 15px;
     background-color: #ffffff;
     color: rgb(0, 0, 0);
@@ -201,11 +201,16 @@ display: none;
     align-items: center;
     cursor: pointer;
     transition: transform 0.2s;
+    border-radius: 50%;
 }
 
+.clarity-button img{
+    height: 30px;
+    width: 30px;
+}
 .boolean-button {
-    height: 35px;
-    width: 70px;
+    height: 30px;
+    width: 30px;
     margin: 0 15px;
     background-color: #ffffff;
     color: rgb(0, 0, 0);
@@ -217,6 +222,13 @@ display: none;
     align-items: center;
     cursor: pointer;
     transition: transform 0.2s;
+    border-radius: 50%;
+
+}
+
+.boolean-button img{
+    height: 30px;
+    width: 30px;
 }
 
 .option-button:hover {
@@ -398,9 +410,7 @@ h3{
     flex-direction: row; /* Stack items vertically */
     align-items: center; /* Center items horizontally */
 }
-#forward{
-    display: none;
-}
+
 }
 
 
