@@ -9,24 +9,13 @@ const firebaseConfig = {
     appId: "1:269589994279:web:4c617a622c328a1224e702",
     measurementId: "G-D8MD1J28GR",
 };
-
-
-// Initialize Firebase App
 firebase.initializeApp(firebaseConfig);
-
-
-
-// Firestore Database Reference
 const db = firebase.firestore();
 
-// Variables for quiz data
-let controlData = []; // To store fetched quiz data
-var quizData;
-var workingData;
-var startTime,endTime,nextTime,showQTime,rightOption,pauseTime;
-var showBooleanTime , showQ2Time,showQ3Time, showClarityTime,nextRightID,nextWrongID;
-var sideBarData;
-
+let quizData, workingData, startTime, pauseTime, nextTime, rightOption;
+let showQTime, showQ2Time, showQ3Time, showBooleanTime, showClarityTime;
+let nextRightID, nextWrongID, lastSeekedTime = null;
+let visitedTimes = [];
 
 
 
@@ -37,10 +26,6 @@ var sideBarData;
 
 let player;
 const playPauseBtn = document.getElementById('play-pause');
-const currentTimeEl = document.getElementById('current-time');
-const durationEl = document.getElementById('duration');
-const muteBtn = document.getElementById('mute');
-const volumeBar = document.getElementById('volume-bar');
 const optionA= document.getElementById('option-a');
 const optionB= document.getElementById('option-b');
 const optionC= document.getElementById('option-c');
@@ -56,11 +41,6 @@ const notClearButon= document.getElementById('option-notClear');
 const yesButton= document.getElementById('option-yes');
 const notButton= document.getElementById('option-not');
 
-
-
-
-
-let lastSeekedTime = null; // To prevent continuous seeking
 const rewindButton = document.getElementById('rewind');
 const forwardButton = document.getElementById('forward');
 
@@ -74,10 +54,7 @@ const forwardButton = document.getElementById('forward');
 // 3. Load the YouTube IFrame API
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('youtube-video', {
-        events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-        }
+        events: { 'onReady': onPlayerReady, 'onStateChange': onPlayerStateChange }
     });
 }
 
@@ -128,73 +105,141 @@ function onPlayerReady(event) {
                 
 
 
-                if(showQTime != 0 && currentTime>=showQTime){
-                    player.pauseVideo(); // Pause the video
-                    showOnlyContainer('options-container-4');
-
-                }
-
-                if(showQ3Time != 0 && currentTime>=showQ3Time){
-                    player.pauseVideo(); // Pause the video
-                    showOnlyContainer('options-container-3');
-
-                }
-
-                if(showQ2Time != 0 && currentTime>=showQ2Time){
-                    player.pauseVideo(); // Pause the video
-                    showOnlyContainer('options-container-2');
-
-                }
 
 
-                if(showBooleanTime != 0 && currentTime>=showBooleanTime){
-                    player.pauseVideo(); // Pause the video
-                    showOnlyContainer('boolean-container');
+                const showTimes = [
+                    { time: showQTime, container: 'options-container-4' },
+                    { time: showQ3Time, container: 'options-container-3' },
+                    { time: showQ2Time, container: 'options-container-2' },
+                    { time: showBooleanTime, container: 'boolean-container' },
+                    { time: showClarityTime, container: 'clarity-container' }
+                  ];
+                  
+                  for (const { time, container } of showTimes) {
+                    if (time !== 0 && currentTime >= time) {
+                      player.pauseVideo();
+                      showOnlyContainer(container);
+                      break;
+                    } else {
+                      hideAllContainers();
+                    }
+                  }
+                  
+                    
+console.log(currentTime);
 
-                }
+if (currentTime < startTime) {
+    for (let i = 1; i < visitedTimes.length; i++) {
+        if (currentTime < visitedTimes[i].start && currentTime >= visitedTimes[i-1].end) {
+            console.log("Skipping to next start time...");
+            seekToTime(visitedTimes[i].start); 
+            return;
+        }
+    }
+}
 
-                if(showClarityTime != 0 && currentTime>=showClarityTime){
-                    player.pauseVideo(); // Pause the video
-                    showOnlyContainer('clarity-container');
-
-                }
 
 
-
-                
             }
+
+           
+
+
+
         }, 100); // Check every 100ms
     }
 
+ 
     rewindButton.addEventListener('click', () => {
-        console.log("rew");
-        let currentTime = event.target.getCurrentTime();
-        if((currentTime-5) < startTime){
-            event.target.seekTo(Math.max(startTime, 0), true);
+        let currentTime = player.getCurrentTime();
+        let newTime = getValidRewindTime(currentTime);
+        if (newTime !== null) {
+            player.seekTo(newTime, true);
             player.playVideo();
         }
-        else{
-        event.target.seekTo(Math.max(currentTime - 5, 0), true);
-        player.playVideo();
-        }
+
     });
+
+    function getValidRewindTime(currentTime) {
+        let newTime = currentTime - 5;
+
+        if (newTime >= startTime && newTime < pauseTime) {
+            console.log("rw1");
+            return newTime;
+        }
+
+        if (newTime < visitedTimes[0].start) {
+            newTime = visitedTimes[0].start;
+            console.log(newTime + " rw4");
+            return newTime;
+        }
+    
+        for (let i = 0; i < visitedTimes.length; i++) {
+            if (newTime > visitedTimes[i].start && newTime < visitedTimes[i].end) {
+                console.log(newTime + " rw2");
+                return newTime;
+            }
+    
+            if (i != 0 && newTime < visitedTimes[i].start && newTime > visitedTimes[i - 1].end) {
+                newTime = Math.max(visitedTimes[i - 1].end - 10, visitedTimes[i - 1].start);
+                console.log(newTime + " rw3");
+                return newTime;
+            }
+        }
+    }
+    
+    function getValidForwardTime(currentTime) {
+        let newTime = currentTime + 5;
+        
+        if (newTime > startTime && newTime < pauseTime) {
+            console.log("fw1");
+            return newTime;
+        }
+
+        if (newTime > visitedTimes[visitedTimes.length-1].end) {
+            newTime = visitedTimes[visitedTimes.length-1].end;
+            player.pauseVideo();
+            return newTime;
+        }
+    
+        for (let i = 0; i < visitedTimes.length; i++) {
+            if (newTime > visitedTimes[i].start && newTime < visitedTimes[i].end) {
+                console.log(newTime + " fw2");
+                return newTime;
+            }
+    
+            if (i < visitedTimes[visitedTimes.length-1] && newTime > visitedTimes[i].end && newTime < visitedTimes[i + 1].start) {
+                newTime = Math.min(visitedTimes[i + 1].start + 5, visitedTimes[i + 1].end -5);
+                console.log(newTime + " rw3");
+                return newTime;
+            }
+        }
+    }
+
 
     // Forward 10 seconds
     forwardButton.addEventListener('click', () => {
         
         let currentTime = event.target.getCurrentTime();
         let duration = event.target.getDuration();
-        if((currentTime+5) > pauseTime){
-            event.target.seekTo(Math.min(currentTime + 5, duration), true);
+        if((currentTime+5) >= pauseTime){
+            event.target.seekTo(pauseTime, true);
             player.pauseVideo();
+            console.log("fw1")
         }
         else{
-            event.target.seekTo(Math.min(pauseTime, duration), true);
+            let newTime = getValidForwardTime(currentTime);
+        if (newTime !== null) {
+            player.seekTo(newTime, true);
             player.playVideo();
+            console.log("fw2")
+
+        }
         }
     });
 
 
+  
      
 
   
@@ -257,8 +302,30 @@ function formatTime(time) {
 }
 
 
+// Function to log visited times
+function logVisitedTimes() {
+    console.log("Visited times:", visitedTimes);
+}
+
+// Function to check if a time range is already in the list
+function isAlreadyVisited(start, end) {
+    return visitedTimes.some(time => time.start === start && time.end === end);
+}
+
+// Function to add new time range to visited list
+function addVisitedTime(start, end) {
+    if (!isAlreadyVisited(start, end)) {
+        visitedTimes.push({ start, end });
+        logVisitedTimes();  // Log the updated list
+    }
+}
+
+
+
 function seekToTime(timeInSeconds) {
     if (player && typeof timeInSeconds === 'number') {
+        addVisitedTime(startTime, pauseTime);
+
         player.seekTo(timeInSeconds, true);  // The second argument (true) ensures accurate seeking
         player.playVideo();
         console.log("seeked to", timeInSeconds);
@@ -290,8 +357,6 @@ async function fetchDataFromFirestore() {
 
         if (quizDoc.exists) {
             const data = quizDoc.data();
-            sideBarData= data.map;
-           // generateSidePanel(sideBarData);
 
 
             quizData = data.mapsData; // Assuming "quizData" holds the array of maps
@@ -331,7 +396,7 @@ function fetchMapValues(workingData){
     if(showQ2Time!=0) pauseTime = showQ2Time;
     if(showBooleanTime!=0) pauseTime = showBooleanTime;
     if(showClarityTime!=0) pauseTime = showClarityTime;
-    if(nextTime!=0) pauseTime = nextTime+10; 
+    if(nextTime!=0) pauseTime = nextTime+5; 
 
 
 
@@ -353,40 +418,7 @@ function fetchMapValues(workingData){
 
 
 
-function sidePanelStimulus(workingData){
-    if(workingData){
-    startTime = parseFloat(workingData.start);
-    workingData.showQTime? showQTime = parseFloat(workingData.showQTime) : showQTime = 0;
-    workingData.showQ3Time? showQ3Time = parseFloat(workingData.showQ3Time) : showQ3Time = 0;
-    workingData.showQ2Time? showQ2Time = parseFloat(workingData.showQ2Time) : showQ2Time = 0;
-    workingData.showBooleanTime? showBooleanTime = parseFloat(workingData.showBooleanTime) : showBooleanTime = 0;
-    workingData.showClarityTime? showClarityTime = parseFloat(workingData.showClarityTime) : showClarityTime = 0;
-    workingData.rightOption? rightOption = workingData.rightOption : rightOption = '0';
-    workingData.nextRightID? nextRightID = workingData.nextRightID : nextRightID = '0';
-    workingData.nextWrongID? nextWrongID = workingData.nextWrongID : nextWrongID = '0';
-    workingData.nextTime? nextTime = workingData.nextTime : nextTime = '0';
 
-
-    if(showQTime!=0) pauseTime = showQTime;
-    if(showQ3Time!=0) pauseTime = showQ3Time;
-    if(showQ2Time!=0) pauseTime = showQ2Time;
-    if(showBooleanTime!=0) pauseTime = showBooleanTime;
-    if(showClarityTime!=0) pauseTime = showClarityTime;
-    if(nextTime!=0) pauseTime = nextTime+10; 
-
-
-
-    }
-    else {
-        alert("no data");
-    }
-
-    hideAllContainers();
-    if (lastSeekedTime !== startTime) {
-        seekToTime(startTime);
-        lastSeekedTime = startTime;
-    }
-}
 
         
 
@@ -501,6 +533,8 @@ function handleOptionClick(option) {
 
 
     fetchMapValues(workingData);
+    addVisitedTime(startTime, pauseTime); // Track new range
+
     if (lastSeekedTime !== startTime) {
         seekToTime(startTime);
         lastSeekedTime = startTime;
@@ -513,6 +547,8 @@ function hideLoadingScreen() {
     document.getElementById("loading-screen").style.display = "none";
     document.getElementById("container").style.display = "flex";
 }
+
+
 
 
 
