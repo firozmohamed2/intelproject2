@@ -80,7 +80,6 @@
 
    
 
-        <button class="fullscreenButton"  onclick="enterLandscapeFullscreen()">Fullscreen</button>
 
         <!-- Loading Screen -->
 <div id="loading-screen">
@@ -95,68 +94,9 @@
 
 
     <script>
-    function enterLandscapeFullscreen() {
-        // Request fullscreen
-        if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen().then(() => {
-                // Lock orientation to landscape
-                if (screen.orientation && screen.orientation.lock) {
-                    screen.orientation.lock('landscape').catch(err => {
-                        console.error('Orientation lock failed:', err);
-                    });
-                }
-            });
-        } else if (document.documentElement.mozRequestFullScreen) { // Firefox
-            document.documentElement.mozRequestFullScreen();
-        } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari, and Opera
-            document.documentElement.webkitRequestFullscreen();
-        } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
-            document.documentElement.msRequestFullscreen();
-        }
-    }
-
-
-    function toggleFullscreenAndOrientation() {
-    if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
-        // Already in fullscreen, so exit and unlock orientation
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-        }
-
-        // Set orientation back to portrait (if supported)
-        if (screen.orientation && screen.orientation.unlock) {
-            screen.orientation.unlock().catch(err => {
-                console.error("Orientation unlock failed:", err);
-            });
-        }
-    } else {
-        // Enter fullscreen and lock to landscape
-        if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen().then(() => {
-                if (screen.orientation && screen.orientation.lock) {
-                    screen.orientation.lock("landscape").catch(err => {
-                        console.error("Orientation lock failed:", err);
-                    });
-                }
-            });
-        } else if (document.documentElement.mozRequestFullScreen) {
-            document.documentElement.mozRequestFullScreen();
-        } else if (document.documentElement.webkitRequestFullscreen) {
-            document.documentElement.webkitRequestFullscreen();
-        } else if (document.documentElement.msRequestFullscreen) {
-            document.documentElement.msRequestFullscreen();
-        }
-    }
-}
 
     </script>
-    <script src="videogit.js">
+    <script src="videogit2.js">
         
    
       
