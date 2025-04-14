@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!-- Coding By CodingNepal - youtube.com/codingnepal -->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Custom Video Player in JavaScript | CodingNepal</title>
+    <link rel="stylesheet" href="customVideoPlayer.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- These 3 links are only for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
+  </head>
+  <body>
+
+  <div class="main">  
+
+    <div class="container show-controls">
+        <div class="wrapper">
+            <div class="video-timeline">
+                <div class="progress-area">
+                    <span>00:00</span>
+                    <div class="progress-bar"></div>
+                </div>
+            </div>
+            <ul class="video-controls">
+                <li class="options left">
+                  
+                    <div class="video-timer">
+                        <p class="current-time">00:00</p>
+                        <p class="separator"> / </p>
+                        <p class="video-duration">00:00</p>
+                    </div>
+                </li>
+                <li class="options center">
+                    <button class="skip-backward"><i class="fas fa-backward"></i></button>
+                    <button class="play-pause"><i class="fas fa-play"></i></button>
+                    <button class="skip-forward"><i class="fas fa-forward"></i></button>
+                </li>
+                <li class="options right">
+                    <div class="playback-content">
+                        <button class="playback-speed"><span class="material-symbols-rounded">slow_motion_video</span></button>
+                        <ul class="speed-options">
+                            <li data-speed="2">2x</li>
+                            <li data-speed="1.5">1.5x</li>
+                            <li data-speed="1" class="active">Normal</li>
+                            <li data-speed="0.75">0.75x</li>
+                            <li data-speed="0.5">0.5x</li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <video src="https://dklc7mpgvbwz0.cloudfront.net/videoplayback.mp4"></video>
+    </div>
+
+    <div class="buttons_container" id="container" >
+        <div class="options-container-4">
+            <button class="option-button" id="option-a">A</button>
+            <button class="option-button" id="option-b">B</button>
+            <button class="option-button" id="option-c">C</button>
+            <button class="option-button" id="option-d">D</button>
+        </div>
+        <div class="options-container-3">
+            <button class="option-button" id="option3-a">A</button>
+            <button class="option-button" id="option3-b">B</button>
+            <button class="option-button" id="option3-c">C</button>
+        </div>
+        <div class="options-container-2">
+            <button class="option-button" id="option2-a">A</button>
+            <button class="option-button" id="option2-b">B</button>
+        </div>
+        <div class="clarity-container">
+            <button class="clarity-button" id="option-clear"><img src="correct.png" /></button>
+            <button class="clarity-button" id="option-notClear"><img src="wrong.png" /></button>
+            
+
+            
+        </div>
+        <div class="boolean-container">
+            <button class="boolean-button" id="option-yes"><img src="correct.png" /></button>
+            <button class="boolean-button" id="option-not"><img src="wrong.png" /></button>
+            
+        </div>
+    
+        <!-- <button class="styled-image-button" onclick="toggleFullscreenAndOrientation()"></button> -->
+
+    </div>
+
+    </div>
+
+    <div id="loading-screen">
+        <div class="loader"></div>
+        <p>Loading, please wait...</p>
+    </div>
+
+    <script src="cvp.js"></script>
+  </body>
+</html>
