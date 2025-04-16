@@ -192,31 +192,89 @@ border-radius: 0px 0px 10px 10px;
 
 
 
+#progress-container {
+    display: flex;
+    align-items: center;
+    background-color: #111;
+    padding: 8px 10px;
+    color: white;
+    font-size: 14px;
+    gap: 10px;
+}
+
+#progress-bar {
+    flex-grow: 1;
+    appearance: none;
+    height: 4px;
+    background: #444;
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+}
+
+#progress-bar::-webkit-slider-thumb {
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: #4CAF50;
+    border-radius: 50%;
+    border: none;
+}
+
+@media screen and (max-width: 768px) {
+    #progress-container {
+        max-width: 100%;
+        font-size: 12px;
+    }
+}
+
+
+.player-wrapper {
+    width: 640px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+@media screen and (max-width: 768px) {
+    .player-wrapper {
+        width: 100%;
+    }
+}
+
+
+
 
 
     </style>
 </head>
 <body>
 
-    <div class="video-player">
-        <!-- YouTube iframe -->
-        <iframe id="youtube-video" 
-        src="https://www.youtube.com/embed/XNJlo2qgNYA?enablejsapi=1&rel=0&controls=0&modestbranding=1&iv_load_policy=3" 
-        frameborder="0" 
-        allow="autoplay; encrypted-media">
-    </iframe>
+    <div class="player-wrapper">
+        <div class="video-player">
+            <iframe id="youtube-video" 
+                src="https://www.youtube.com/embed/XNJlo2qgNYA?enablejsapi=1&rel=0&controls=0&modestbranding=1&iv_load_policy=3" 
+                frameborder="0" 
+                allow="autoplay; encrypted-media">
+            </iframe>
+        </div>
     
-       
-    </div>
-
-    <div class="controls">
-        <div>
-            <button id="rewind"><i class="fas fa-backward"></i></button> <!-- Rewind Button -->
-            <button id="play-pause"><i class="fas fa-play"></i></button>
-            <button id="forward"><i class="fas fa-forward"></i></button> <!-- Forward Button -->
-        
+        <div id="progress-container">
+            <span id="current-time">0:00</span>
+            <input type="range" id="progress-bar" value="0" min="0" max="100" step="0.1">
+            <span id="total-time">0:00</span>
+        </div>
+    
+        <div class="controls">
+            <div>
+                <button id="rewind"><i class="fas fa-backward"></i></button>
+                <button id="play-pause"><i class="fas fa-play"></i></button>
+                <button id="forward"><i class="fas fa-forward"></i></button>
             </div>
         </div>
+    </div>
+    
     
 
    
@@ -246,6 +304,19 @@ const forwardButton = document.getElementById('forward');
 // Flag to track play/pause state
 let isPlaying = false;
 
+
+const progressBar = document.getElementById('progress-bar');
+const currentTimeText = document.getElementById('current-time');
+const totalTimeText = document.getElementById('total-time');
+
+// Utility: format time like 1:05
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+}
+
+
 // YouTube IFrame API Ready
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('youtube-video', {
@@ -260,7 +331,32 @@ function onYouTubeIframeAPIReady() {
 function onPlayerReady(event) {
     document.getElementById('loading-screen').style.display = 'none';
 
-    // Play/Pause toggle
+    // Update total time once video metadata is loaded
+    const updateTotalDuration = setInterval(() => {
+        const duration = player.getDuration();
+        if (duration) {
+            totalTimeText.textContent = formatTime(duration);
+            progressBar.max = duration;
+            clearInterval(updateTotalDuration);
+        }
+    }, 500);
+
+    // Timer & progress bar update
+    setInterval(() => {
+        if (player && typeof player.getCurrentTime === "function") {
+            const currentTime = player.getCurrentTime();
+            const duration = player.getDuration();
+            progressBar.value = currentTime;
+            currentTimeText.textContent = formatTime(currentTime);
+        }
+    }, 500);
+
+    // Seek on slider change
+    progressBar.addEventListener('input', () => {
+        player.seekTo(parseFloat(progressBar.value), true);
+    });
+
+    // Buttons
     playPauseBtn.addEventListener('click', () => {
         if (isPlaying) {
             player.pauseVideo();
@@ -269,13 +365,11 @@ function onPlayerReady(event) {
         }
     });
 
-    // Rewind 10 seconds
     rewindButton.addEventListener('click', () => {
         const currentTime = player.getCurrentTime();
         player.seekTo(Math.max(0, currentTime - 10), true);
     });
 
-    // Forward 10 seconds
     forwardButton.addEventListener('click', () => {
         const currentTime = player.getCurrentTime();
         const duration = player.getDuration();
