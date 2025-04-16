@@ -1,47 +1,317 @@
 <!DOCTYPE html>
-<html>
-  <body style="margin:0">
-    <div id="player"></div>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900&display=swap" rel="stylesheet">
+    <style>
+       
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
+
+    <style>
+
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    flex-direction: column;
+    background-color: #f9f9f9;
+}
+
+
+.video-player {
+    width: 640px;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px 8px 0px 0px;
+    overflow: hidden;
+}
+
+iframe {
+    width: 100%;
+    height: 360px;
+    border-radius: 8px;
+}
+
+.controls {
+    left: 0;
+    width: 640px; /* Same width as video player */
+    padding:10px 0px ;
+    background-color: rgba(0, 0, 0, 1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s;
+    display:flex;
+    justify-content: center;
+}
+
+.container{
+    display: flex;
+justify-content: center;
+width: 640px; /* Same width as video player */
+background-color: black;
+padding: 10px 0;
+border-radius: 0px 0px 10px 10px;
+}
+
+
+.controls button {
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    margin-right: 10px;
+    transition: transform 0.2s;
+}
+
+#play-pause,#rewind,#forward{
+    background: #000;
+    color: #fff;
+    padding: 6px 8px;
+    margin-left: 5px;
+}
+
+.controls button:hover {
+    transform: scale(1.1);
+}
+
+.controls input[type="range"] {
+    width: 200px;
+    height: 5px;
+    background-color: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    outline: none;
+    margin-left: 10px;
+}
+
+.controls i {
+    font-size: 18px;
+}
+
+.controls input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #4CAF50;
+    cursor: pointer;
+    border: 2px solid white;
+}
+
+
+
+
+@media screen and (max-width: 768px) {
+    body {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .video-player {
+        width: 100%;
+        max-width: 100%; /* Full width on mobile */
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        height: 0;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+
+    .controls{
+        width: 100%;
+        max-width: 100%;    }
+
+    iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+
+   
+}
+
+
+
+/* Loading Screen Styles */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.loader {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#loading-screen p {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+
+
+
+
+    </style>
+</head>
+<body>
+
+    <div class="video-player">
+        <!-- YouTube iframe -->
+        <iframe id="youtube-video" 
+        src="https://www.youtube.com/embed/XNJlo2qgNYA?enablejsapi=1&rel=0&controls=0&modestbranding=1&iv_load_policy=3" 
+        frameborder="0" 
+        allow="autoplay; encrypted-media">
+    </iframe>
+    
+       
+    </div>
+
+    <div class="controls">
+        <div>
+            <button id="rewind"><i class="fas fa-backward"></i></button> <!-- Rewind Button -->
+            <button id="play-pause"><i class="fas fa-play"></i></button>
+            <button id="forward"><i class="fas fa-forward"></i></button> <!-- Forward Button -->
+        
+            </div>
+        </div>
+    
+
+   
+
+
+   
+
+
+        <!-- Loading Screen -->
+<div id="loading-screen">
+    <div class="loader"></div>
+    <p>Loading, please wait...</p>
+</div>
+
+<!-- Main Content -->
+
+
 
     <script>
-      var player;
 
-      function onYouTubeIframeAPIReady() {
-        player = new YT.Player('player', {
-          height: '200',
-          width: '100%',
-          videoId: 'YV5vDUVTvug',
-          playerVars: {
-            'controls': 0,
-            'rel': 0,
-            'showinfo': 0
-          },
-          events: {
-            'onReady': onPlayerReady
-          }
-        });
-      }
 
-      function onPlayerReady(event) {
-        // Player is ready
-      }
+let player;
+const playPauseBtn = document.getElementById('play-pause');
+const rewindButton = document.getElementById('rewind');
+const forwardButton = document.getElementById('forward');
 
-      function playVideo() { player.playVideo(); }
-      function pauseVideo() { player.pauseVideo(); }
-      function muteVideo() { player.isMuted() ? player.unMute() : player.mute(); }
-      function forwardVideo() { player.seekTo(player.getCurrentTime() + 10, true); }
-      function rewindVideo() { player.seekTo(player.getCurrentTime() - 10, true); }
-      function fullscreenVideo() {
-        var iframe = document.querySelector("iframe");
-        if (iframe.requestFullscreen) iframe.requestFullscreen();
-        else if (iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
-        else if (iframe.mozRequestFullScreen) iframe.mozRequestFullScreen();
-      }
+// Flag to track play/pause state
+let isPlaying = false;
 
-      var tag = document.createElement('script');
-      tag.src = "https://www.youtube.com/iframe_api";
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+// YouTube IFrame API Ready
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('youtube-video', {
+        events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+        }
+    });
+}
+
+// When player is ready
+function onPlayerReady(event) {
+    document.getElementById('loading-screen').style.display = 'none';
+
+    // Play/Pause toggle
+    playPauseBtn.addEventListener('click', () => {
+        if (isPlaying) {
+            player.pauseVideo();
+        } else {
+            player.playVideo();
+        }
+    });
+
+    // Rewind 10 seconds
+    rewindButton.addEventListener('click', () => {
+        const currentTime = player.getCurrentTime();
+        player.seekTo(Math.max(0, currentTime - 10), true);
+    });
+
+    // Forward 10 seconds
+    forwardButton.addEventListener('click', () => {
+        const currentTime = player.getCurrentTime();
+        const duration = player.getDuration();
+        player.seekTo(Math.min(duration, currentTime + 10), true);
+    });
+}
+
+// Update play/pause button icon based on player state
+function onPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.PLAYING) {
+        isPlaying = true;
+        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+        isPlaying = false;
+        playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+    }
+}
+
+// Load YouTube Iframe API dynamically
+const tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+const firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+
+
+
+ 
+
+
+
+
+
+
+
+
     </script>
-  </body>
+</body>
 </html>
