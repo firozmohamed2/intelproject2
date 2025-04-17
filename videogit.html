@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
@@ -8,99 +8,130 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="videogit.css">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900&display=swap" rel="stylesheet">
-    <style>
-       
-    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:400,700"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="videogit.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900&display=swap"
+      rel="stylesheet"
+    />
+    <style></style>
     <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
-</head>
-<body>
-
+  </head>
+  <body>
     <div class="video-player">
-        <!-- YouTube iframe -->
-        <iframe id="youtube-video" 
-        src="https://www.youtube.com/embed/XNJlo2qgNYA?enablejsapi=1&rel=0&controls=0&modestbranding=1&iv_load_policy=3" 
-        frameborder="0" 
-        allow="autoplay; encrypted-media">
-    </iframe>
-    
-       
+      <!-- YouTube iframe -->
+      <iframe
+        id="youtube-video"
+        src="https://www.youtube.com/embed/XNJlo2qgNYA?enablejsapi=1&rel=0&controls=0&modestbranding=1&iv_load_policy=3"
+        frameborder="0"
+        allow="autoplay; encrypted-media"
+      >
+      </iframe>
     </div>
 
     <div class="controls">
-        <div>
-            <button id="rewind"><i class="fas fa-backward"></i></button> <!-- Rewind Button -->
-            <button id="play-pause"><i class="fas fa-play"></i></button>
-            <button id="forward"><i class="fas fa-forward"></i></button> <!-- Forward Button -->
-        
-            </div>
-        </div>
-    <div class="container" id="container" style="display: none;">
-        <div class="options-container-4">
-            <button class="option-button" id="option-a">A</button>
-            <button class="option-button" id="option-b">B</button>
-            <button class="option-button" id="option-c">C</button>
-            <button class="option-button" id="option-d">D</button>
-        </div>
-        <div class="options-container-3">
-            <button class="option-button" id="option3-a">A</button>
-            <button class="option-button" id="option3-b">B</button>
-            <button class="option-button" id="option3-c">C</button>
-        </div>
-        <div class="options-container-2">
-            <button class="option-button" id="option2-a">A</button>
-            <button class="option-button" id="option2-b">B</button>
-        </div>
-        <div class="clarity-container">
-            <button class="clarity-button" id="option-clear"><img src="correct.png" /></button>
-            <button class="clarity-button" id="option-notClear"><img src="wrong.png" /></button>
-            
-
-            
-        </div>
-        <div class="boolean-container">
-            <button class="boolean-button" id="option-yes"><img src="correct.png" /></button>
-            <button class="boolean-button" id="option-not"><img src="wrong.png" /></button>
-            
-        </div>
-    
-        <!-- <button class="styled-image-button" onclick="toggleFullscreenAndOrientation()"></button> -->
-
+      <div>
+        <button id="rewind"><i class="fas fa-backward"></i></button>
+        <!-- Rewind Button -->
+        <button id="play-pause"><i class="fas fa-play"></i></button>
+        <button id="forward"><i class="fas fa-forward"></i></button>
+        <!-- Forward Button -->
+      </div>
+    </div>
+    <div class="container" id="container" style="display: none">
+      <div class="options-container-4">
+        <button class="option-button" id="option-a">A</button>
+        <button class="option-button" id="option-b">B</button>
+        <button class="option-button" id="option-c">C</button>
+        <button class="option-button" id="option-d">D</button>
+      </div>
+      <div class="options-container-3">
+        <button class="option-button" id="option3-a">A</button>
+        <button class="option-button" id="option3-b">B</button>
+        <button class="option-button" id="option3-c">C</button>
+      </div>
+      <div class="options-container-2">
+        <button class="option-button" id="option2-a">A</button>
+        <button class="option-button" id="option2-b">B</button>
+      </div>
+      <div class="clarity-container">
+        <button class="clarity-button" id="option-clear">
+          <img src="correct.png" />
+        </button>
+        <button class="clarity-button" id="option-notClear">
+          <img src="wrong.png" />
+        </button>
+      </div>
+      <div class="boolean-container">
+        <button class="boolean-button" id="option-yes">
+          <img src="correct.png" />
+        </button>
+        <button class="boolean-button" id="option-not">
+          <img src="wrong.png" />
+        </button>
+      </div>
+       
     </div>
 
-   
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+      <div class="loader"></div>
+      <p>Loading, please wait...</p>
+    </div>
 
+    <!-- Offline/Error UI -->
+    <div
+      id="error-screen"
+      style="display: none; text-align: center; padding: 30px"
+    >
+      <i class="fas fa-wifi" style="font-size: 50px; color: #ff4d4d"></i>
+      <h2 style="margin: 15px 0">No Internet Connection</h2>
+      <p style="color: #555">Please check your network and try again.</p>
+    </div>
 
-   
-
-
-        <!-- Loading Screen -->
-<div id="loading-screen">
-    <div class="loader"></div>
-    <p>Loading, please wait...</p>
-</div>
-
-<!-- Main Content -->
-<div id="main-content" style="display: none;">
-    <!-- Your app’s main content goes here -->
-</div>
-
-
+    <script></script>
+    <script src="videogit2.js"></script>
     <script>
+      function showErrorUI() {
+        document.getElementById("loading-screen").style.display = "none";
+        document.querySelector(".video-player").style.display = "none";
+        document.querySelector(".controls").style.display = "none";
+        document.getElementById("container").style.display = "none";
+        document.getElementById("error-screen").style.display = "block";
+      }
 
-    </script>
-    <script src="videogit.js">
-        
-   
-      
+      // Check on load
+      window.addEventListener("load", () => {
+        if (!navigator.onLine) {
+          showErrorUI();
+        }
+      });
 
+      // Listen for offline event
+      window.addEventListener("offline", () => {
+        showErrorUI();
+      });
+
+      // Catch script loading errors
+      window.addEventListener(
+        "error",
+        function (e) {
+          console.error("Script error detected:", e.message);
+          showErrorUI();
+        },
+        true
+      );
     </script>
-</body>
+  </body>
 </html>
