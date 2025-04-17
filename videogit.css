@@ -329,3 +329,31 @@ iframe {
   font-size: 18px;
   color: #333;
 }
+
+#reload_button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #3498db;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#reload_button:hover {
+  background-color: #2980b9;
+  transform: scale(1.05);
+}
+
+#reload_button:active {
+  transform: scale(0.98);
+}
+
+@media screen and (max-width: 768px) {
+  #reload_button {
+    width: 80%;
+    font-size: 18px;
+  }
+}
